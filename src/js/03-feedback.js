@@ -1,45 +1,37 @@
-
-//   1) Відстежуй на формі подію input, і щоразу записуй у локальне сховище об'єкт з полями 
-// email і message, у яких зберігай поточні значення полів форми.
-// 3) Під час сабміту форми очищуй сховище і поля форми, а також виводь у консоль об'єкт з 
-// полями email, message та їхніми поточними значеннями.
-
-//  перевіряти всі значення, які ви читаєте з localStorage і 
-// записуєте в поля форми.Якщо там пусто, вам у поля запишеться undefined.При сабміті форми
-//  не забувайте чистити обʼєкт в якому зберігаєте значення з полів форми, щоб інформація не 
-//  тягнулась в наступні сабміти.Форма має відправлятись при заповнених 2 - х полях форми
+// Під час сабміту форми виводь у консоль об'єкт з полями email, message.
 
 import throttle from "lodash.throttle";
 
 const refs = {
   formEl: document.querySelector('.feedback-form'),
-  textareaEl : document.querySelector('.feedback-form textarea'),
+  textareaEl: document.querySelector('.feedback-form textarea'),
+  inputEl: document.querySelector('input'),
 }
 const STORAGE_KEY = 'feedback-form-state';
 // зберігаємо імейл та повідомлення в обєкт
 let formData = {};
-refs.formEl.addEventListener('input', e =>{
-  formData[e.target.name] = e.target.value;
-  console.log(formData);
-});
 
-  refs.formEl.addEventListener('submit', onFormSubmit);
-  refs.textareaEl.addEventListener('input', throttle(onTextareaInput, 500) );
+refs.formEl.addEventListener('input', onFormData);
+refs.formEl.addEventListener('submit', onFormSubmit);
+// refs.formEl.addEventListener('submit', onRightSubmit);
+refs.textareaEl.addEventListener('input', throttle(onTextareaInput, 500) );
  
 function onTextareaInput(e){
   // отримуємо значення
   const message = e.target.value;
   // зберігаємо його в сховище
   localStorage.setItem(STORAGE_KEY, message )
-  
 }
 
 function onFormSubmit(e){
   // Х поведінку по замовчуванню
-e.preventDefault;
+e.preventDefault();
 // Забираємо повідомлення із сховища і чистимо форму, reset() для очистки форм
 e.currentTarget.reset();
-localStorage.removeItem(STORAGE_KEY); 
+  localStorage.removeItem(STORAGE_KEY); 
+ // Форма відправляється при заповнених 2-х полях форми
+onRightSubmit()
+ 
 }
 
 populateTextarea();
@@ -51,4 +43,18 @@ if (savadMessage){
    refs.textareaEl.value = savadMessage;
 }
 }
-// console.log();
+
+function onFormData(e){
+  formData[e.target.name] = e.target.value;
+  console.log(formData);
+  // return formData;
+};
+
+function onRightSubmit(e) {
+ if (refs.inputEl.value === '' || refs.textareaEl.value === '') {
+     alert("Заповніть, будь ласка, всі поля");
+ } else {
+   onFormData();
+  }
+}
+
