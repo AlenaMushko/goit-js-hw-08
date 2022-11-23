@@ -28,10 +28,10 @@ function onClickCreateModalWindow(e) {
 //     captionsDelay: 250,
 //   })
 
-let gallery = new SimpleLightbox('.gallery a');
-gallery.on('show.simplelightbox', onShowImg); 
- function onShowImg() {
-   captionsData = "alt";
-   captionsDelay= 250;
-}
+// let gallery = new SimpleLightbox('.gallery a');
+// gallery.on('show.simplelightbox', onShowImg); 
+//  function onShowImg() {
+//    captionsData = "alt";
+//    captionsDelay= 250;
+// }
 
