@@ -1,4 +1,3 @@
-// Під час сабміту форми виводь у консоль об'єкт з полями email, message.
 
 import throttle from "lodash.throttle";
 
@@ -6,6 +5,7 @@ const refs = {
   formEl: document.querySelector('.feedback-form'),
   textareaEl: document.querySelector('.feedback-form textarea'),
   inputEl: document.querySelector('input'),
+  buttonEl : document.querySelector('button'),
 }
 const STORAGE_KEY = 'feedback-form-state';
 // зберігаємо імейл та повідомлення в обєкт
@@ -13,14 +13,13 @@ let formData = {};
 
 refs.formEl.addEventListener('input', onFormData);
 refs.formEl.addEventListener('submit', onFormSubmit);
-// refs.formEl.addEventListener('submit', onRightSubmit);
 refs.textareaEl.addEventListener('input', throttle(onTextareaInput, 500) );
  
 function onTextareaInput(e){
   // отримуємо значення
   const message = e.target.value;
   // зберігаємо його в сховище
-  localStorage.setItem(STORAGE_KEY, message )
+  localStorage.setItem(STORAGE_KEY, message);
 }
 
 function onFormSubmit(e){
@@ -29,6 +28,8 @@ e.preventDefault();
 // Забираємо повідомлення із сховища і чистимо форму, reset() для очистки форм
 e.currentTarget.reset();
   localStorage.removeItem(STORAGE_KEY); 
+
+
  // Форма відправляється при заповнених 2-х полях форми
 onRightSubmit()
  
@@ -47,14 +48,16 @@ if (savadMessage){
 function onFormData(e){
   formData[e.target.name] = e.target.value;
   console.log(formData);
-  // return formData;
 };
 
 function onRightSubmit(e) {
- if (refs.inputEl.value === '' || refs.textareaEl.value === '') {
-     alert("Заповніть, будь ласка, всі поля");
- } else {
-   onFormData();
-  }
+  if (refs.inputEl.value === '' || refs.textareaEl.value === '') {
+   alert("Заповніть, будь ласка, всі поля");    
+  } 
+localStorage.setItem('form', JSON.stringify(formData))
+  localStorage.getItem('form')
+
 }
 
+
+ 
