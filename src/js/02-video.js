@@ -13,24 +13,16 @@
 //  часу після перезавантаження сторінки.Також не забуваємо перевіряти наявність данних,
 //   коли читаєте з localStorage.Якщо в localStorage немає ключа, який ви намагаєтесь
 // прочитати, метод getItem(key) поверне вам null.
-// <iframe
-//   id="vimeo-player"
-//   src="https://player.vimeo.com/video/236203659"
-//   width="640"
-//   height="360"
-//   frameborder="0"
-//   allowfullscreen
-//   allow="autoplay; encrypted-media"
-// ></iframe>
-import Player from '@vimeo/player';
 
+import Player from '@vimeo/player';
+import throttle from 'lodash.throttle';
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
+ 
+player.on('timeupdate', throttle(onPlay, 1000));
 
-player.on('play', function () {
-  console.log('played the video!');
-});
+function onPlay({ seconds }) {
+  localStorage.setItem('videoplayer-current-time', seconds);
+}
 
-player.getVideoTitle().then(function (title) {
-  console.log('title:', title);
-});
+player.setCurrentTime(localStorage.getItem('videoplayer-current-time'));
